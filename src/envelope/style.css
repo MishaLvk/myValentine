@@ -1,32 +1,67 @@
 body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+.section {
+  background-color: #fab1a0;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #746b6b;
-  margin: 0;
 }
+
 .envelope {
   position: relative;
-  width: 300px;
-  height: 200px;
-  background: #b5651d;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+  width: 200px;
+  height: 110px;
+  cursor: pointer;
 }
-.card {
+
+.envelope__top {
   position: absolute;
-  width: 280px;
-  height: 180px;
-  background: white;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: 0.3s;
+  transform: translateY(-100%);
+  transform-origin: bottom;
+  z-index: 5;
+}
+
+/* Конверт стартує у відкритому стані */
+.envelope.open .envelope__top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: 0.2s;
+  transform: translateY(-100%);
+  transform-origin: bottom;
+}
+
+.envelope.closed .envelope__top {
+  transform: translateY(-110%) rotateX(180deg);
+  z-index: 2;
+}
+
+.envelope__body {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+}
+
+.paper {
+  background-color: #fff;
+  width: 100px;
+  height: 80px;
   text-align: center;
-  font-size: 18px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  transition: transform 0.5s ease-out;
+  position: absolute;
+  left: 50%;
+  margin-left: -50px;
+  transform: translateY(-40px);
+  transition: 0.3s;
+  bottom: 0;
 }
