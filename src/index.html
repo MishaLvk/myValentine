@@ -1,16 +1,40 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Page title</title>
-    <link rel="stylesheet" href="./sass/index.scss" />
-    <script type="module" src="./index.js"></script>
+    <title>Валентинка</title>
+    <link rel="stylesheet" href="../src/envelope/style.css" />
   </head>
   <body>
-    <h1>Example title</h1>
-    <!-- ❗️❗️❗️ Add partials like so for every page -->
-    <include src="./partials/example.html"></include>
-    <a href="./envelope/index.html">Відкрити анімований конверт</a>
+    <div class="section">
+      <div class="envelope">
+        <div class="envelope__top">
+          <img src="./images/envelope-top.svg" alt="" />
+        </div>
+        <div class="paper">
+          <div class="items">
+            <div class="postcard">
+              <p>Моя кохана</p>
+              <p>Валентинка</p>
+              <p>🫶</p>
+            </div>
+            <div class="photo" id="photo1">
+              <img class="image" src="./images/1-164-min.jpg" />
+            </div>
+            <div class="photo" id="photo2">
+              <img class="image" src="./images/1-92-min.jpg" />
+            </div>
+            <div class="photo" id="photo3">
+              <img class="image" src="./images/DSC_8433.NEF.jpg" />
+            </div>
+          </div>
+        </div>
+        <div class="envelope__body">
+          <img src="./images/envelope.png" alt="" width="200px" />
+        </div>
+      </div>
+    </div>
+    <script src="./envelope/script.js"></script>
   </body>
 </html>
