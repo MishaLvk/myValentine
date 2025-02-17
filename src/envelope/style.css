@@ -42,8 +42,8 @@ body {
 }
 
 .envelope.closed .envelope__top {
-  z-index: 5;
   transition: 2.2s;
+  z-index: 5;
   transform: translateY(-109%) rotateX(180deg);
 }
 
@@ -83,6 +83,7 @@ body {
 .envelope.closed .photo {
   transition: 0.9s;
   transform: translateY(38px);
+  z-index: 1;
 }
 
 .image {

@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function moveAt(pageX, pageY) {
       target.style.position = 'absolute';
+
       target.style.zIndex = 1000;
       target.style.left = pageX - shiftX + 'px';
       target.style.top = pageY - shiftY + 'px';
