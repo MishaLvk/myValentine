@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const screenHeight = window.innerHeight;
 
     contentItems.forEach((photo, index) => {
-      let angle = Math.random() * 40 - 20 + 'deg';
+      let angle = Math.random() * 90 - 20 + 'deg';
       let x = Math.random() * (screenWidth * 0.6) - screenWidth * 0.3 + 'px'; // Обмеження в межах екрану
       let y = -Math.random() * (screenHeight * 0.4) - screenHeight * 0.2 + 'px'; // Виліт тільки вгору
       photo.style.transition =
