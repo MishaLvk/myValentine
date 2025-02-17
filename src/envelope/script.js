@@ -3,24 +3,27 @@ document.addEventListener('DOMContentLoaded', function () {
   const envelopeTop = document.querySelector('.envelope__top');
   const content = document.querySelector('.items');
   const contentItems = document.querySelectorAll('.photo');
+  const postcard = document.querySelector('.postcard'); // Додаємо відкритку
   let isOpen = false;
-  let stack = Array.from(contentItems).reverse(); // Стек для витягування вмісту
 
   function toggleEnvelope(open) {
     isOpen = open;
     envelope.classList.toggle('open', isOpen);
     envelope.classList.toggle('closed', !isOpen);
-    content.style.top = isOpen ? '80%' : '100%';
 
-    if (!isOpen) {
+    if (isOpen) {
+      envelope.style.transform = 'translateY(50px)'; // Опускаємо конверт трохи вниз
+      postcard.style.transition = 'transform 1.5s ease-out';
+      postcard.style.transform = 'translateY(-60px)'; // Відкритка трохи висовується
+      releasePhotos();
+    } else {
+      postcard.style.transition = 'transform 1s ease-in';
+      postcard.style.transform = 'translateY(-8px)'; // Відкритка повертається назад
       setTimeout(() => {
-        stack.forEach(item => {
-          content.appendChild(item);
-          item.style.position = '';
-          item.style.left = '';
-          item.style.top = '';
-        });
-      }, 300);
+        envelope.style.transition = 'transform 2.5s ease-out';
+        envelope.style.transform = 'translateY(0)';
+        collectPhotos();
+      }, 500); // Затримка перед закриттям конверта
     }
   }
 
@@ -43,71 +46,24 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('touchend', onSwipeEnd);
   });
 
-  document.querySelectorAll('.photo img').forEach(img => {
-    img.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      let touch = e.touches[0];
-      let shiftX = touch.clientX - img.getBoundingClientRect().left;
-      let shiftY = touch.clientY - img.getBoundingClientRect().top;
+  function releasePhotos() {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
 
-      img.style.position = 'absolute';
-      img.style.zIndex = 1000;
-      document.body.appendChild(img);
-
-      function moveAt(pageX, pageY) {
-        img.style.left = pageX - shiftX + 'px';
-        img.style.top = pageY - shiftY + 'px';
-      }
-
-      function onTouchMove(e) {
-        let touch = e.touches[0];
-        moveAt(touch.pageX, touch.pageY);
-      }
-
-      document.addEventListener('touchmove', onTouchMove);
-
-      function stopMoving() {
-        document.removeEventListener('touchmove', onTouchMove);
-        document.removeEventListener('touchend', stopMoving);
-      }
-
-      document.addEventListener('touchend', stopMoving);
+    contentItems.forEach((photo, index) => {
+      let angle = Math.random() * 40 - 20 + 'deg';
+      let x = Math.random() * (screenWidth * 0.6) - screenWidth * 0.3 + 'px'; // Обмеження в межах екрану
+      let y = -Math.random() * (screenHeight * 0.4) - screenHeight * 0.2 + 'px'; // Виліт тільки вгору
+      photo.style.transition =
+        'transform 0.7s ease-out, top 0.7s ease-out, left 0.7s ease-out';
+      photo.style.transform = `translate(${x}, ${y}) rotate(${angle})`;
     });
-  });
+  }
 
-  document.querySelectorAll('.photo img').forEach(img => {
-    img.onmousedown = function (e) {
-      e.preventDefault();
-      var shiftX = e.clientX - img.getBoundingClientRect().left;
-      var shiftY = e.clientY - img.getBoundingClientRect().top;
-
-      img.style.position = 'absolute';
-      img.style.zIndex = 1000;
-      document.body.appendChild(img);
-
-      function moveAt(pageX, pageY) {
-        img.style.left = pageX - shiftX + 'px';
-        img.style.top = pageY - shiftY + 'px';
-      }
-
-      moveAt(e.pageX, e.pageY);
-
-      function onMouseMove(e) {
-        moveAt(e.pageX, e.pageY);
-      }
-
-      document.addEventListener('mousemove', onMouseMove);
-
-      function stopMoving() {
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', stopMoving);
-      }
-
-      document.addEventListener('mouseup', stopMoving);
-    };
-
-    img.ondragstart = function () {
-      return false;
-    };
-  });
+  function collectPhotos() {
+    contentItems.forEach(photo => {
+      photo.style.transition = 'transform 0.7s ease-in';
+      photo.style.transform = 'translate(0, 10px) rotate(0)';
+    });
+  }
 });

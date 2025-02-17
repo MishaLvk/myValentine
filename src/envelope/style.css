@@ -3,8 +3,12 @@ body {
   font-family: sans-serif;
 }
 
+p {
+  margin: 0;
+}
+
 .section {
-  background-color: #7ab4ff;
+  background-color: #a0c9ff;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -58,20 +62,20 @@ body {
 
 .paper {
   background-color: #fff;
-  width: 100px;
-  height: 60px;
+  width: 180px;
+  height: 100px;
   text-align: center;
   position: absolute;
   left: 50%;
-  margin-left: -50px;
-  transform: translateY(-10px);
+  margin-left: -90px;
+  transform: translateY(-5px);
   transition: 0.3s;
   bottom: 0;
   z-index: 1;
 }
 
 .photo {
-  transform: translateY(38px);
+  transform: translateY(10px);
 }
 
 .envelope.open .photo {
@@ -98,4 +102,12 @@ body {
   transition: 0.3s;
   bottom: 0;
   z-index: 2;
+}
+
+.postcard {
+  height: 98px;
+  width: 180px;
+  padding-top: 10px;
+  background-color: rgb(255, 255, 255);
+  transform: translateY(-8px);
 }
