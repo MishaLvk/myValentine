@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let isOpen = false;
   let stack = Array.from(contentItems).reverse(); // Стек для витягування вмісту
 
+  // Функція для відкриття та закриття конверта
   function toggleEnvelope(open) {
     isOpen = open;
     envelope.classList.toggle('open', isOpen);
@@ -13,21 +14,27 @@ document.addEventListener('DOMContentLoaded', function () {
     content.style.top = isOpen ? '80%' : '100%';
   }
 
+  // Клік на верхню частину конверта відкриває/закриває його
   envelopeTop.addEventListener('click', () => {
     toggleEnvelope(!isOpen);
   });
 
+  // Обробка свайпів для відкриття/закриття
   document.addEventListener('touchstart', function (event) {
     const startY = event.touches[0].clientY;
 
     function onSwipeEnd(e) {
       const endY = e.changedTouches[0].clientY;
       if (endY - startY > 50) {
-        // Свайп вниз - закрити конверт і повернути вміст
-        stack.forEach(item => {
-          content.appendChild(item);
+        // Свайп вниз - повернути всі витягнуті фото та закрити конверт
+        contentItems.forEach(item => {
+          item.style.transition = 'top 0.5s ease';
+          item.style.top = '0px';
         });
-        toggleEnvelope(false);
+        setTimeout(() => {
+          stack.forEach(item => content.appendChild(item));
+          toggleEnvelope(false);
+        }, 500);
       } else if (startY - endY > 50) {
         // Свайп вгору - відкрити конверт
         toggleEnvelope(true);
@@ -37,45 +44,41 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('touchend', onSwipeEnd);
   });
 
-  contentItems.forEach(item => {
-    item.addEventListener('mousedown', startDrag);
-    item.addEventListener('touchstart', startDrag);
+  // Додаємо обробники для перетягування
+  document.querySelectorAll('.photo img').forEach(img => {
+    img.onmousedown = function (e) {
+      e.preventDefault(); // Запобігаємо стандартному drag&drop
+
+      var shiftX = e.clientX - img.getBoundingClientRect().left;
+      var shiftY = e.clientY - img.getBoundingClientRect().top;
+
+      img.style.position = 'absolute';
+      img.style.zIndex = 1000;
+      document.body.appendChild(img);
+
+      function moveAt(pageX, pageY) {
+        img.style.left = pageX - shiftX + 'px';
+        img.style.top = pageY - shiftY + 'px';
+      }
+
+      moveAt(e.pageX, e.pageY);
+
+      function onMouseMove(e) {
+        moveAt(e.pageX, e.pageY);
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+
+      function stopMoving() {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', stopMoving);
+      }
+
+      document.addEventListener('mouseup', stopMoving);
+    };
+
+    img.ondragstart = function () {
+      return false;
+    };
   });
-
-  function startDrag(event) {
-    event.preventDefault();
-    let target = event.target;
-    let shiftX = event.clientX - target.getBoundingClientRect().left;
-    let shiftY = event.clientY - target.getBoundingClientRect().top;
-
-    function moveAt(pageX, pageY) {
-      target.style.position = 'absolute';
-
-      target.style.zIndex = 1000;
-      target.style.left = pageX - shiftX + 'px';
-      target.style.top = pageY - shiftY + 'px';
-    }
-
-    function onMove(event) {
-      moveAt(event.pageX, event.pageY);
-    }
-
-    function onTouchMove(event) {
-      let touch = event.touches[0];
-      moveAt(touch.pageX, touch.pageY);
-    }
-
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('touchmove', onTouchMove);
-
-    function drop() {
-      document.removeEventListener('mousemove', onMove);
-      document.removeEventListener('touchmove', onTouchMove);
-      document.removeEventListener('mouseup', drop);
-      document.removeEventListener('touchend', drop);
-    }
-
-    document.addEventListener('mouseup', drop);
-    document.addEventListener('touchend', drop);
-  }
 });
